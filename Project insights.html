@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Insights - Nallampatti</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Header Section (reused from front page) -->
+    <header>
+        <div class="navbar">
+            <div class="logo-container">
+                <img src="Logos\iccw-logo-white.png" alt="ICCW Logo" class="logo">
+                <span class="site-name">Nallampatti</span>
+            </div>
+            <div class="nav-and-partner">
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="index.html" class="nav-item">Home</a></li>
+                        <li><a href="project-insights.html" class="nav-item active">Project Insights</a></li>
+                        <li><a href="dashboard.html" class="nav-item">Dashboard</a></li>
+                        <li><a href="Gallery.html" class="nav-item" >Gallery</a></li>
+                        <li><a href="Contact Us.html" class="nav-item" >Contact Us</a></li>
+                    </ul>
+                </nav>
+                <div class="partner-logo-container">
+                    <img src="Logos\IITM-500x500.png" alt="IITM Logo" class="partner-logo">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Quote Section with Slider -->
+    <section class="quote-section">
+        <div class="quote-slider">
+            <div class="quotes">
+                <!-- Quote 1 -->
+                <div class="quote">
+                    <p>“The agrochemicals are associated with diabetes and cardiovascular desieses in rural comunities in India”</p>
+                    <span class="quote-author">- Velmurugan, et al 2020</span>
+                </div>
+                <!-- Quote 2 -->
+                <div class="quote">
+                    <p>“Contaminated water and food in rural communities expose residents to toxic substances, increasing the risk of non-communicable diseases (NCDs)”</p>
+                    <span class="quote-author">- Velmurugan, et al 2020</span>
+                </div>
+                <!-- Quote 3 -->
+                <div class="quote">
+                    <p>“Nallampatti has high rates of diabetes and hypertension, likely linked to toxic elements from agricultural practices”</p>
+                    <span class="quote-author">- Velmurugan, et al 2018</span>
+                </div>
+            </div>
+            <!-- Arrows for manual control -->
+            <a class="prev-quote" onclick="moveQuote(-1)">&#10094;</a>
+            <a class="next-quote" onclick="moveQuote(1)">&#10095;</a>
+        </div>
+    </section>
+
+     <!-- Demographics Section -->
+    <section class="demographics-section">
+        <h2>Demographics</h2>
+        <div class="demographics-content">
+            <div class="demographics-text">
+                <p>
+                    Nallampatti village has 12 wards with a population of 3,874. ICCW conducted a comprehensive survey that engaged 1,538 residents to gather insights on water availability & quality, agricultural practices, pesticide use, and related health issues. The study’s findings offer critical insights into the community’s needs and challenges, shedding light on key areas that require attention. These insights help identify gaps in infrastructure, access to resources, and overall well-being, enabling stakeholders to better understand the community's unique issues. By addressing these challenges, the study serves as a foundation for informed decision-making and targeted interventions aimed at improving the community's quality of life and sustainable development.
+
+                </p>
+            </div>
+            <div class="demographics-image">
+                <img src="Demographics_Image.png" alt="Demographics Map">
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Education and Occupation Section -->
+    <section class="education-occupation-section">
+        <div class="education-occupation-content">
+            <div class="education">
+                <h3>Education</h3>
+                <p>
+                    The literacy rate in Nallampatti village shows a noticeable variation among its residents. Of the surveyed population, 31.40% are illiterate, while 68.60% are literate. The literate group has a range of educational levels, from primary schooling to graduation, demonstrating the diverse educational development within the community.
+            </div>
+            <div class="occupation">
+                <h3>Occupation</h3>
+                <p>
+                    The survey's population distribution shows that most respondents are farmers, comprising 38.7% of the total, with 596 individuals. Homemakers are the second largest group, representing 22.6% (348 participants). Small-scale business owners account for 14.8% of the surveyed population, totaling 229 individuals. Salaried workers make up 13.9%, with 214 respondents. The elderly, categorized as old-aged, comprise 5.3%, or 82 individuals. Students represent the smallest group, making up 4.4% with 69 participants. This distribution reflects a predominantly agrarian community, with significant representation from homemakers and small business owners.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Land use Section -->
+    <section class="landuse-section">
+        <h2>Land Use/Land Cover - Nallmapatti</h2>
+        <div class="landuse-content">
+            <div class="landuse-image">
+                <img src="land_uses_1.jpg" alt="Land Use Map">
+            </div>
+            <div class="landuse-text">
+                <p>
+                    The land use and land cover of Nallampatti village indicate that agriculture dominates the landscape,
+covering 6.54 sq. km, making it the primary land use in the area. Fallow land, which is currently
+uncultivated but potentially arable, occupies 4.66 sq. km. Plantations account for 0.68 sq. km, indicating
+some level of commercial and subsistence tree crop like coconut and plantain cultivation. Settlements,
+including residential and infrastructure areas, cover a minimal 0.12 sq. km, reflecting a small built-up area
+within the village. Waterbodies occupy 2.57 Hectares and lower Bhavani canal which passes through the
+Nallampatti covers a stretch of 8.42 km. This distribution highlights the village's strong agricultural base
+with some scope for further development or conservation of land and water resources.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+<footer>
+    <div class="footer-content">
+        <!-- Left side: Developed by ICCW -->
+        <div class="left-text">
+            <p>Developed by ICCW</p>
+        </div>
+
+        <!-- Center: Social Media Icons -->
+        <div class="social-icons">
+            <!-- Facebook -->
+            <a href="https://www.facebook.com/ICCWIndia" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-facebook-f"></i>
+            </a>
+
+            <!-- LinkedIn -->
+            <a href="https://www.linkedin.com/company/iccw/" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-linkedin-in"></i>
+            </a>
+
+            <!-- Twitter -->
+            <a href="https://x.com/ICCWIndia" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-twitter"></i>
+            </a>
+
+            <!-- Instagram -->
+            <a href="https://www.instagram.com/iccw_iitm/" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-instagram"></i>
+            </a>
+
+            <!-- YouTube-->
+            <a href="https://www.youtube.com/@iccwnews7325" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-youtube"></i>
+            </a>
+        </div>
+
+        <!-- Right side: All Rights Reserved -->
+        <div class="right-text">
+            <p>© 2020 ICCW. All Rights Reserved.</p>
+        </div>
+    </div>
+</footer>
+
+    <!-- JavaScript for Quote Slider -->
+    <script>
+        let quoteIndex = 0;
+        const quotes = document.querySelectorAll('.quote');
+        
+        function showQuote(n) {
+            // Hide all quotes
+            quotes.forEach(quote => quote.style.display = 'none');
+            // Loop back to the first quote if we exceed the number of quotes
+            if (n >= quotes.length) { quoteIndex = 0; }
+            if (n < 0) { quoteIndex = quotes.length - 1; }
+            // Show the current quote
+            quotes[quoteIndex].style.display = 'block';
+        }
+
+        function moveQuote(n) {
+            quoteIndex += n;
+            showQuote(quoteIndex);
+        }
+
+        // Auto slide the quotes every 2 seconds
+        setInterval(() => {
+            moveQuote(1);
+        }, 1500);
+
+        // Initialize the first quote
+        showQuote(quoteIndex);
+    </script>
+
+</body>
+</html>

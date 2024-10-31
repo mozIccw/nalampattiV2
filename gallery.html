@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Nallampatti</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <div class="navbar">
+            <!-- Left side: Site logo -->
+            <div class="logo-container">
+                <img src="Logos\iccw-logo-white.png" alt="ICCW Logo" class="logo">
+                <span class="site-name">Nallampatti</span>
+            </div>
+    
+            <!-- Right side: Navigation menu and Partner logo -->
+            <div class="nav-and-partner">
+                <!-- Navigation links -->
+                <nav>
+                    <ul class="nav-links">
+                        <li><a href="index.html" class="nav-item">Home</a></li>
+                        <li><a href="Project insights.html" class="nav-item">Project Insights</a></li>
+                        <li><a href="Dashboard.html" class="nav-item">Dashboard</a></li>
+                        <li><a href="Gallery.html" class="nav-item active">Gallery</a></li>
+                        <li><a href="Contact Us.html" class="nav-item">Contact Us</a></li>
+                    </ul>
+                </nav>
+    
+                <!-- Partner logo -->
+                <div class="partner-logo-container">
+                    <img src="Logos\IITM-500x500.png" alt="IITM Logo" class="partner-logo">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Gallery Section -->
+    <section class="gallery-container">
+        <h2>Project Phase-1</h2>
+        <div class="gallery-phase phase-1">
+            <img src="Phase-1/health-survey.jpg" alt="Phase 1 Image 1" class="gallery-img" onclick="openModal(this)">
+            <img src="Phase-1\np-health-survey.jpg" alt="Phase 1 Image 2" class="gallery-img" onclick="openModal(this)">
+            <img src="Phase-1\sensor-install-2.jpg" alt="Phase 1 Image 3" class="gallery-img" onclick="openModal(this)">
+            <img src="Phase-1\sensor-install.jpg" alt="Phase 1 Image 4" class="gallery-img" onclick="openModal(this)">
+            <img src="Phase-1\survey-2.jpeg" alt="Phase 1 Image 5" class="gallery-img" onclick="openModal(this)">
+            <img src="Phase-1\water-bodies.jpeg" alt="Phase 1 Image 6" class="gallery-img" onclick="openModal(this)">
+        </div>
+        <h2>Project Phase-2</h2>
+        <div class="gallery-phase phase-2">
+            <img src="Phase -2\field-visit.jpg" alt="Phase 2 Image 1" class="gallery-img" onclick="openModal(this)">
+            <img src="Phase -2\field-visit-2.jpg" alt="Phase 2 Image 2" class="gallery-img" onclick="openModal(this)">
+            <img src="Phase -2\field- visit-3.jpg" alt="Phase 2 Image 3" class="gallery-img" onclick="openModal(this)">
+            <img src="Phase -2\field-visit-4.jpg" alt="Phase 2 Image 4" class="gallery-img" onclick="openModal(this)">
+            <img src="Phase -2\np-discussion.jpg" alt="Phase 2 Image 5" class="gallery-img" onclick="openModal(this)">
+            <img src="Phase -2\group-pic.jpg" alt="Phase 2 Image 6" class="gallery-img" onclick="openModal(this)">
+        </div>
+    </section>
+
+    <!-- Modal for Image Pop-up -->
+    <div id="myModal" class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <img class="modal-content" id="modalImg">
+        <div id="caption"></div>
+    </div>
+
+
+     <!-- Footer Section -->
+<footer>
+    <div class="footer-content">
+        <!-- Left side: Developed by ICCW -->
+        <div class="left-text">
+            <p>Developed by ICCW</p>
+        </div>
+
+        <!-- Center: Social Media Icons -->
+        <div class="social-icons">
+            <!-- Facebook -->
+            <a href="https://www.facebook.com/ICCWIndia" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-facebook-f"></i>
+            </a>
+
+            <!-- LinkedIn -->
+            <a href="https://www.linkedin.com/company/iccw/" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-linkedin-in"></i>
+            </a>
+
+            <!-- Twitter -->
+            <a href="https://x.com/ICCWIndia" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-twitter"></i>
+            </a>
+
+            <!-- Instagram -->
+            <a href="https://www.instagram.com/iccw_iitm/" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-instagram"></i>
+            </a>
+
+            <!-- YouTube-->
+            <a href="https://www.youtube.com/@iccwnews7325" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-youtube"></i>
+            </a>
+        </div>
+
+        <!-- Right side: All Rights Reserved -->
+        <div class="right-text">
+            <p>© 2020 ICCW. All Rights Reserved.</p>
+        </div>
+    </div>
+</footer>
+<!-- JavaScript for Modal Image Pop-up -->
+<script>
+    function openModal(img) {
+        const modal = document.getElementById("myModal");
+        const modalImg = document.getElementById("modalImg");
+        const captionText = document.getElementById("caption");
+        modal.style.display = "block";
+        modalImg.src = img.src; // Set the image source to the clicked image
+        //captionText.innerHTML = img.alt; // Set the caption to the alt text of the image
+    }
+
+    function closeModal() {
+        const modal = document.getElementById("myModal");
+        modal.style.display = "none";
+    }
+
+    // Close the modal when clicking outside the image
+    window.onclick = function(event) {
+        const modal = document.getElementById("myModal");
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
+
+
+</body>
+</html>

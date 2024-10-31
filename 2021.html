@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Nalampatti Water Quality Map 2021</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        /* Styles remain unchanged */
+        #map {
+    height: 99vH;
+    width: 100%;
+}   
+    .modal {
+    font-family: sans-serif;
+    display: none;
+    position: fixed;
+    z-index: 1;
+    padding-top: 56px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 400;
+    font-size: 11px;
+}
+.leaflet-bottom{
+display: none;
+}
+.highlight-soft {
+        background-color: #ffcccc; /* Soft red color */
+    }
+.highlight-strong {
+    /*  background-color: #ffb3b3; /* Light red background */
+    color: #ff0400;            /* Dark red text */
+    font-weight: 800;
+}
+
+
+.modal-content {
+    background: rgb(255 255 255);
+    backdrop-filter: blur(3px);
+    margin: auto;
+    padding: 6px 5px 5px 5px;
+    border: 2px solid rgb(13 94 170 / 8%);
+    width: 80%;
+    max-width: 700px;
+    box-shadow: 0 1px 4px rgb(0 93 170 / 10%);
+    border-radius: 9px;
+    position: relative;
+}
+
+.modal-header {
+    padding: 2px;
+    background-color: #0d5eaa;
+    color: white;
+}
+.overlay {
+      position: fixed;            /* Position the overlay fixed to screen */
+      top: 20px;                  /* Distance from the top */
+      right: 33%;                 /* Distance from the right */
+     
+      z-index: 1000;              /* Place it on top of other content */
+      border-radius: 8px;
+      padding: 2px;
+    }
+
+    /* Content inside the overlay */
+    .overlay-content {
+    background-color: #061a3a;
+    padding: 6px;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+.close {
+    position: absolute;
+    top: 6px;
+    right: 13px;
+    color: rgb(255, 255, 255);
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.modal-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.modal-table th, .modal-table td {
+    border: 1px solid #1f6cea5e;
+    padding: 6px;
+}
+
+.modal-table th {
+    background-color: #0d5eaa47;
+    text-align: center;
+}
+
+        .leaflet-div-icon {
+            background: #72212100;
+            border: none;
+        }
+        .leaflet-container {
+        line-height: 0.7;
+    }
+        
+    </style>
+</head>
+<body style="display: block;margin: 2px;">
+    <div class="overlay">
+        <div class="overlay-content">
+            <div class="card-name" style="background: #061a3a; color: white;">Nalampatti Water Quality Parameters - 2021</div>
+         
+        
+        </div>
+      </div>
+    <div id="map"></div>
+
+<!-- Modal structure -->
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <div class="modal-header">
+            
+            <h2 style="margin-block-end: 0.33em; margin-block-start: 0.33em; font-size: 1.2em;">Sample No: </h2>
+        </div>
+        <table class="modal-table">
+            <thead>
+                <tr>
+                    <th>Parameter</th>
+                    <th>Water Quality</th>
+                    <th>Desirable limit</th>
+                    <th>Permissible limit</th>
+                    <th>Standard</th>
+                </tr>
+            </thead>
+            <tbody id="modalSampleTable">
+                <!-- Data will be injected here -->
+            </tbody>
+        </table>
+        <!-- Note below the modal -->
+        <p style="margin-top: 7px;font-size: 0.9em;color: #f5010a;font-weight: 600;margin-block-start: 0.4em;margin-block-end: 0.1em;">
+            Note: Values highlighted in red are the above permissible limit.
+        </p>
+    </div>
+</div>
+
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+    var map = L.map('map').setView([11.35, 77.537], 14.49);
+
+    // Use ESRI's World Imagery tiles for satellite view
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 18,
+        attribution: 'Tiles © Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoIQ, DMTI Spatial, and the GIS User Community'
+    }).addTo(map);
+        var boundary = {
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [                [
+            [77.515112909000038,11.335182588000066],[77.514677175000031,11.335754288000032],[77.515907813000069,11.345437830000037],[77.519042798000044,11.347989552000058],[77.521738323000079,11.349700535000068],[77.522775442000068,11.349958287000049],[77.526771669000084,11.355810858000041],[77.526437356000031,11.356886301000031],[77.528964587000075,11.357847164000077],[77.529198784000073,11.358942631000048],[77.529695337000078,11.357892587000038],[77.530584604000069,11.358015353000042],[77.535522037000078,11.361427615000025],[77.535806849000039,11.362193062000074],[77.535797940000066,11.363428039000041],[77.53670197200006,11.363038586000073],[77.538269317000072,11.362744840000062],[77.53894826100003,11.363105725000025],[77.539306789000079,11.362601756000061],[77.539933508000047,11.362002973000074],[77.540909721000048,11.362004123000077],[77.541555563000031,11.361536441000055],[77.542046894000066,11.361273274000041],[77.542581295000048,11.361158529000022],[77.543028916000083,11.361321476000057],[77.543166993000057,11.361486226000068],[77.54327515600005,11.361834335000026],[77.543455203000065,11.36198468300006],[77.543714957000077,11.362043254000071],[77.543922311000074,11.361992794000059],[77.544117439000047,11.361872473000062],[77.544376597000053,11.361835222000025],[77.544619078000039,11.361777987000039],[77.544828958000039,11.361775890000047],[77.545163940000066,11.361721035000073],[77.545324596000057,11.361860351000075],[77.545437006000043,11.362058164000075],[77.54559583300005,11.362314591000029],[77.545596265000029,11.362668592000034],[77.545661585000062,11.362861400000043],[77.545960110000067,11.363106209000023],[77.546306943000047,11.363167826000051],[77.546501704000036,11.362995730000023],[77.546635746000049,11.362736686000062],[77.546736152000051,11.362667558000055],[77.547294368000053,11.362872020000054],[77.547494626000059,11.362881246000029],[77.548060740000039,11.362852426000075],[77.548697083000036,11.362833237000075],[77.550095541000076,11.362795842000025],[77.551082722000046,11.362792030000037],[77.551563409000039,11.362831393000022],[77.552243047000047,11.363073093000025],[77.552876381000033,11.363174491000052],[77.553289433000032,11.363153802000056],[77.553663783000047,11.363139834000037],[77.554057227000044,11.363180316000069],[77.554549125000051,11.363211505000038],[77.554677551000054,11.362748130000057],[77.554571107000072,11.362071043000071],[77.554548364000084,11.361373309000044],[77.554535539000085,11.360553426000024],[77.554486793000081,11.36021812000007],[77.554437233000044,11.360012786000027],[77.554147589000081,11.359610813000074],[77.553922894000038,11.359187194000071],[77.55395085300006,11.358338178000054],[77.553987771000038,11.357529194000051],[77.554192560000047,11.356593524000061],[77.554573749000042,11.354814915000077],[77.555407457000058,11.350879266000049],[77.555996177000054,11.348545696000031],[77.556453046000058,11.346838847000072],[77.557311613000081,11.344075071000077],[77.557903248000059,11.342192857000043],[77.558182277000071,11.341152345000069],[77.559215577000032,11.33704683600007],[77.559572110000033,11.335485718000029],[77.560130739000044,11.33309758300004],[77.552912914000046,11.332730974000071],[77.546733103000065,11.333015652000029],[77.544970384000067,11.33309149300004],[77.541808682000067,11.332826755000042],[77.53946366200006,11.333136563000039],[77.538853803000052,11.333171005000054],[77.537568068000041,11.332751818000077],[77.534046180000075,11.333615519000034],[77.529134252000063,11.336460761000069],[77.527718080000056,11.337665473000072],[77.525033877000055,11.337548000000027],[77.524032435000038,11.337331754000047],[77.522902825000074,11.337601536000022],[77.521299012000043,11.334987954000042],[77.519811514000082,11.33425208500006],[77.519072855000047,11.333462115000032],[77.51833451300007,11.331984625000075],[77.517518352000081,11.332608680000021],[77.516405009000039,11.333880599000054],[77.515447577000032,11.334815391000063],[77.515112909000038,11.335182588000066]
+          ]]
+            }
+        };
+
+        L.geoJSON(boundary, {
+            style: function() {
+                return {
+                    color: "white",
+                    weight: 2,
+                    fillColor: "#fff0",
+                    fillOpacity: 0.4
+                };
+            }
+        }).addTo(map);
+
+        // Sample data with coordinates
+        var samples = [
+    { "lat": 11.35006, "lng": 77.52784, "sample_no": 1 },
+    { "lat": 11.35600, "lng": 77.53010, "sample_no": 2 },
+    { "lat": 11.35606, "lng": 77.53156, "sample_no": 3 },
+    { "lat": 11.35174, "lng": 77.53280, "sample_no": 4 },
+    { "lat": 11.34993, "lng": 77.53606, "sample_no": 5 },
+    { "lat": 11.35270, "lng": 77.53885, "sample_no": 6 },
+    { "lat": 11.35808, "lng": 77.54027, "sample_no": 7 },
+    { "lat": 11.34071, "lng": 77.53752, "sample_no": 8 },
+    { "lat": 11.34034, "lng": 77.53664, "sample_no": 9 },
+    { "lat": 11.34000, "lng": 77.54366, "sample_no": 10 },
+    { "lat": 11.34246, "lng": 77.54368, "sample_no": 11 },
+    { "lat": 11.33740, "lng": 77.53703, "sample_no": 12 },
+    { "lat": 11.33800, "lng": 77.53900, "sample_no": 13 },
+    { "lat": 11.33860, "lng": 77.53771, "sample_no": 14 },
+    { "lat": 11.35296, "lng": 77.54167, "sample_no": 15 },
+    { "lat": 11.3615, "lng": 77.538, "sample_no": 16 },
+    { "lat": 11.361, "lng": 77.537, "sample_no": 17 },
+    { "lat": 11.35006, "lng": 77.54199, "sample_no": 18 },
+    { "lat": 11.34107, "lng": 77.53897, "sample_no": 19 },
+    { "lat": 11.34143, "lng": 77.54283, "sample_no": 20 },
+    { "lat": 11.33718, "lng": 77.54816, "sample_no": 21 },
+    { "lat": 11.33484, "lng": 77.55030, "sample_no": 22 },
+    { "lat": 11.34364, "lng": 77.53838, "sample_no": 23 },
+    { "lat": 11.34078, "lng": 77.53342, "sample_no": 24 },
+    { "lat": 11.34123, "lng": 77.52898, "sample_no": 25 },
+    { "lat": 11.34045, "lng": 77.53247, "sample_no": 26 },
+    { "lat": 11.34398, "lng": 77.52193, "sample_no": 27 },
+    { "lat": 11.34411, "lng": 77.52295, "sample_no": 28 },
+    { "lat": 11.33904, "lng": 77.52718, "sample_no": 29 },
+    { "lat": 11.33810, "lng": 77.52086, "sample_no": 30 }
+];
+
+        // Detailed data for each sample
+        var sampleDetails = {
+            
+    "1": {
+        "pH": 7.5,
+        "Turbidity (NTU)": 5,
+        "Hardness (mg/L)": 175,
+        "Calcium (mg/L)": 30,
+        "Magnesium (mg/L)": 24.3,
+        "Alkalinity (mg/L)": 200.0,
+        "Chloride (mg/L)": 36,
+        "Nitrate (mg/L)": 0.001,
+        "Nitrite (mg/L)": 0.0343,
+        "Ammonia (mg/L)": 0.61,
+        "Phosphate (mg/L)": 0.612,
+        "Fluoride (mg/L)": 0.5,
+        "Iron (mg/L)": 0.05
+    },
+    "2": {
+        "pH": 7.5,
+        "Turbidity (NTU)": 5,
+        "Hardness (mg/L)": 375,
+        "Calcium (mg/L)": 40,
+        "Magnesium (mg/L)": 66.825,
+        "Alkalinity (mg/L)": 475.0,
+        "Chloride (mg/L)": 54,
+        "Nitrate (mg/L)": 65.0,
+        "Nitrite (mg/L)": 0.0343,
+        "Ammonia (mg/L)": 0.061,
+        "Phosphate (mg/L)": 0.306,
+        "Fluoride (mg/L)": 1.5,
+        "Iron (mg/L)": 0.1
+    },
+    "3": {
+        "pH": 7.5,
+        "Turbidity (NTU)": 0,
+        "Hardness (mg/L)": 400,
+        "Calcium (mg/L)": 60,
+        "Magnesium (mg/L)": 60.75,
+        "Alkalinity (mg/L)": 425.0,
+        "Chloride (mg/L)": 144,
+        "Nitrate (mg/L)": 25.0,
+        "Nitrite (mg/L)": 0.0343,
+        "Ammonia (mg/L)": 0.061,
+        "Phosphate (mg/L)": 0.306,
+        "Fluoride (mg/L)": 1.0,
+        "Iron (mg/L)": 0.05
+    },
+    "4": {
+        "pH": 7.5,
+        "Turbidity (NTU)": 0,
+        "Hardness (mg/L)": 450,
+        "Calcium (mg/L)": 50,
+        "Magnesium (mg/L)": 78.975,
+        "Alkalinity (mg/L)": 425.0,
+        "Chloride (mg/L)": 90,
+        "Nitrate (mg/L)": 10.0,
+        "Nitrite (mg/L)": 0.001,
+        "Ammonia (mg/L)": 0.061,
+        "Phosphate (mg/L)": 1.53,
+        "Fluoride (mg/L)": 1.5,
+        "Iron (mg/L)": 0.05
+    },
+    "5": {
+        "pH": 7.5,
+        "Turbidity (NTU)": 0,
+        "Hardness (mg/L)": 625,
+        "Calcium (mg/L)": 50,
+        "Magnesium (mg/L)": 121.5,
+        "Alkalinity (mg/L)": 400.0,
+        "Chloride (mg/L)": 126,
+        "Nitrate (mg/L)": 65.0,
+        "Nitrite (mg/L)": 0.343,
+        "Ammonia (mg/L)": 0.061,
+        "Phosphate (mg/L)": 0.612,
+        "Fluoride (mg/L)": 1.5,
+        "Iron (mg/L)": 0.05
+    },
+    "6": {
+        "pH": 7.5,
+        "Turbidity (NTU)": 0,
+        "Hardness (mg/L)": 400,
+        "Calcium (mg/L)": 70,
+        "Magnesium (mg/L)": 54.675,
+        "Alkalinity (mg/L)": 325.0,
+        "Chloride (mg/L)": 72,
+        "Nitrate (mg/L)": 25.0,
+        "Nitrite (mg/L)": 0.0343,
+        "Ammonia (mg/L)": 0.0366,
+        "Phosphate (mg/L)": 0.612,
+        "Fluoride (mg/L)": 0.5,
+        "Iron (mg/L)": 0.05
+    },
+    "7": {
+        "pH": 7.5,
+        "Turbidity (NTU)": 0,
+        "Hardness (mg/L)": 275,
+        "Calcium (mg/L)": 50,
+        "Magnesium (mg/L)": 36.45,
+        "Alkalinity (mg/L)": 275.0,
+        "Chloride (mg/L)": 36,
+        "Nitrate (mg/L)": 25.0,
+        "Nitrite (mg/L)": 0.001,
+        "Ammonia (mg/L)": 0.061,
+        "Phosphate (mg/L)": 0.612,
+        "Fluoride (mg/L)": 0.5,
+        "Iron (mg/L)": 0.05
+    },
+    "8": {
+        "pH": 7.5,
+        "Turbidity (NTU)": 0,
+        "Hardness (mg/L)": 400,
+        "Calcium (mg/L)": 50,
+        "Magnesium (mg/L)": 66.825,
+        "Alkalinity (mg/L)": 350.0,
+        "Chloride (mg/L)": 72,
+        "Nitrate (mg/L)": 10.0,
+        "Nitrite (mg/L)": 0.0343,
+        "Ammonia (mg/L)": 0.061,
+        "Phosphate (mg/L)": 0.306,
+        "Fluoride (mg/L)": 1.0,
+        "Iron (mg/L)": 0.05
+    },
+    "9": {
+        "pH": 7.5,
+        "Turbidity (NTU)": 0,
+        "Hardness (mg/L)": 525,
+        "Calcium (mg/L)": 60,
+        "Magnesium (mg/L)": 91.125,
+        "Alkalinity (mg/L)": 425.0,
+        "Chloride (mg/L)": 54,
+        "Nitrate (mg/L)": 10.0,
+        "Nitrite (mg/L)": 0.001,
+        "Ammonia (mg/L)": 0.061,
+        "Phosphate (mg/L)": 0.612,
+        "Fluoride (mg/L)": 1.5,
+        "Iron (mg/L)": 0.05
+    },
+    "10": {
+        "pH": 7.5,
+        "Turbidity (NTU)": 0,
+        "Hardness (mg/L)": 175,
+        "Calcium (mg/L)": 40,
+        "Magnesium (mg/L)": 18.225,
+        "Alkalinity (mg/L)": 175.0,
+        "Chloride (mg/L)": 54,
+        "Nitrate (mg/L)": 0.001,
+        "Nitrite (mg/L)": 0.001,
+        "Ammonia (mg/L)": 0.61,
+        "Phosphate (mg/L)": 0.612,
+        "Fluoride (mg/L)": 0.5,
+        "Iron (mg/L)": 0.05
+    },
+    "11": {
+        "pH": 7.0,
+        "Turbidity (NTU)": 0,
+        "Hardness (mg/L)": 375,
+        "Calcium (mg/L)": 130,
+        "Magnesium (mg/L)": 12.15,
+        "Alkalinity (mg/L)": 311.2,
+        "Chloride (mg/L)": 108,
+        "Nitrate (mg/L)": 45.0,
+        "Nitrite (mg/L)": 2.744,
+        "Ammonia (mg/L)": 0.122,
+        "Phosphate (mg/L)": 0.612,
+        "Fluoride (mg/L)": 0.001,
+        "Iron (mg/L)": 0.0
+    },
+    "12": {
+        "pH": 7.5,
+        "Turbidity (NTU)": 0,
+        "Hardness (mg/L)": 600,
+        "Calcium (mg/L)": 120,
+        "Magnesium (mg/L)": 72.9,
+        "Alkalinity (mg/L)": 425.0,
+        "Chloride (mg/L)": 54,
+        "Nitrate (mg/L)": 0.001,
+        "Nitrite (mg/L)": 0.0343,
+        "Ammonia (mg/L)": 0.001,
+        "Phosphate (mg/L)": 1.53,
+        "Fluoride (mg/L)": 1.0,
+        "Iron (mg/L)": 0.05
+    },
+    "13": {
+        "pH": 7.5,
+        "Turbidity (NTU)": 0,
+        "Hardness (mg/L)": 225,
+        "Calcium (mg/L)": 40,
+        "Magnesium (mg/L)": 30.375,
+        "Alkalinity (mg/L)": 200.0,
+        "Chloride (mg/L)": 54,
+        "Nitrate (mg/L)": 10.0,
+        "Nitrite (mg/L)": 0.001,
+        "Ammonia (mg/L)": 0.061,
+        "Phosphate (mg/L)": 0.306,
+        "Fluoride (mg/L)": 0.5,
+        "Iron (mg/L)": 0.05
+    },
+    "14": {
+        "pH": 7.5,
+        "Turbidity (NTU)": 0,
+        "Hardness (mg/L)": 450,
+        "Calcium (mg/L)": 70,
+        "Magnesium (mg/L)": 66.825,
+        "Alkalinity (mg/L)": 350.0,
+        "Chloride (mg/L)": 72,
+        "Nitrate (mg/L)": 0.001,
+        "Nitrite (mg/L)": 0.0343,
+        "Ammonia (mg/L)": 0.001,
+        "Phosphate (mg/L)": 1.53,
+        "Fluoride (mg/L)": 0.5,
+        "Iron (mg/L)": 0.05
+    },
+    "15": {
+        "pH": 7.5,
+        "Turbidity (NTU)": 0,
+        "Hardness (mg/L)": 275,
+        "Calcium (mg/L)": 90,
+        "Magnesium (mg/L)": 12.15,
+        "Alkalinity (mg/L)": 200.0,
+        "Chloride (mg/L)": 72,
+        "Nitrate (mg/L)": 10.0,
+        "Nitrite (mg/L)": 0.001,
+        "Ammonia (mg/L)": 0.061,
+        "Phosphate (mg/L)": 0.612,
+        "Fluoride (mg/L)": 0.001,
+        "Iron (mg/L)": 0.05
+    },
+    "16": {
+        "pH": 7.5,
+        "Turbidity (NTU)": 0,
+        "Hardness (mg/L)": 525,
+        "Calcium (mg/L)": 80,
+        "Magnesium (mg/L)": 78.975,
+        "Alkalinity (mg/L)": 200.0,
+        "Chloride (mg/L)": 54,
+        "Nitrate (mg/L)": 10.0,
+        "Nitrite (mg/L)": 0.001,
+        "Ammonia (mg/L)": 0.122,
+        "Phosphate (mg/L)": 1.53,
+        "Fluoride (mg/L)": 0.5,
+        "Iron (mg/L)": 0.05
+    },
+    "17": {
+        "pH": 7.5,
+        "Turbidity (NTU)": 0,
+        "Hardness (mg/L)": 350,
+        "Calcium (mg/L)": 40,
+        "Magnesium (mg/L)": 60.75,
+        "Alkalinity (mg/L)": 300.0,
+        "Chloride (mg/L)": 72,
+        "Nitrate (mg/L)": 10.0,
+        "Nitrite (mg/L)": 0.0343,
+        "Ammonia (mg/L)": 0.122,
+        "Phosphate (mg/L)": 0.612,
+        "Fluoride (mg/L)": 0.5,
+        "Iron (mg/L)": 0.05
+    },
+    "18": {
+        "pH": 7.5,
+        "Turbidity (NTU)": 0,
+        "Hardness (mg/L)": 350,
+        "Calcium (mg/L)": 60,
+        "Magnesium (mg/L)": 48.6,
+        "Alkalinity (mg/L)": 350.0,
+        "Chloride (mg/L)": 54,
+        "Nitrate (mg/L)": 45.0,
+        "Nitrite (mg/L)": 0.001,
+        "Ammonia (mg/L)": 0.061,
+        "Phosphate (mg/L)": 0.612,
+        "Fluoride (mg/L)": 1.5,
+        "Iron (mg/L)": 0.05
+    },
+    "19": {
+        "pH": 7.5,
+        "Turbidity (NTU)": 0,
+        "Hardness (mg/L)": 500,
+        "Calcium (mg/L)": 120,
+        "Magnesium (mg/L)": 48.6,
+        "Alkalinity (mg/L)": 300.0,
+        "Chloride (mg/L)": 72,
+        "Nitrate (mg/L)": 0.001,
+        "Nitrite (mg/L)": 0.0343,
+        "Ammonia (mg/L)": 0.001,
+        "Phosphate (mg/L)": 1.53,
+        "Fluoride (mg/L)": 0.5,
+        "Iron (mg/L)": 0.05
+    },
+    "20": {
+        "pH": 7.5,
+        "Turbidity (NTU)": 0,
+        "Hardness (mg/L)": 400,
+        "Calcium (mg/L)": 50,
+        "Magnesium (mg/L)": 66.825,
+        "Alkalinity (mg/L)": 300.0,
+        "Chloride (mg/L)": 90,
+        "Nitrate (mg/L)": 25.0,
+        "Nitrite (mg/L)": 0.0343,
+        "Ammonia (mg/L)": 7.32,
+        "Phosphate (mg/L)": 0.153,
+        "Fluoride (mg/L)": 1.0,
+        "Iron (mg/L)": 0.05
+    },
+    "21": {
+        "pH": 7.5,
+        "Turbidity (NTU)": 0,
+        "Hardness (mg/L)": 475,
+        "Calcium (mg/L)": 110,
+        "Magnesium (mg/L)": 48.6,
+        "Alkalinity (mg/L)": 325.0,
+        "Chloride (mg/L)": 72,
+        "Nitrate (mg/L)": 0.001,
+        "Nitrite (mg/L)": 0.001,
+        "Ammonia (mg/L)": 0.001,
+        "Phosphate (mg/L)": 1.53,
+        "Fluoride (mg/L)": 0.5,
+        "Iron (mg/L)": 0.05
+    },
+    "22": {
+        "pH": 7.5,
+        "Turbidity (NTU)": 0,
+        "Hardness (mg/L)": 675,
+        "Calcium (mg/L)": 140,
+        "Magnesium (mg/L)": 78.975,
+        "Alkalinity (mg/L)": 400.0,
+        "Chloride (mg/L)": 162,
+        "Nitrate (mg/L)": 0.001,
+        "Nitrite (mg/L)": 0.001,
+        "Ammonia (mg/L)": 0.001,
+        "Phosphate (mg/L)": 1.53,
+        "Fluoride (mg/L)": 0.5,
+        "Iron (mg/L)": 0.05
+    },
+    "23": {
+        "pH": 7.5,
+        "Turbidity (NTU)": 5,
+        "Hardness (mg/L)": 25,
+        "Calcium (mg/L)": 40,
+        "Magnesium (mg/L)": 18.225,
+        "Alkalinity (mg/L)": 300.0,
+        "Chloride (mg/L)": 54,
+        "Nitrate (mg/L)": 65.0,
+        "Nitrite (mg/L)": 0.001,
+        "Ammonia (mg/L)": 0.061,
+        "Phosphate (mg/L)": 0.306,
+        "Fluoride (mg/L)": 0.5,
+        "Iron (mg/L)": 0.05
+    },
+    "24": {
+        "pH": 7.5,
+        "Turbidity (NTU)": 0,
+        "Hardness (mg/L)": 350,
+        "Calcium (mg/L)": 20,
+        "Magnesium (mg/L)": 72.9,
+        "Alkalinity (mg/L)": 325.0,
+        "Chloride (mg/L)": 36,
+        "Nitrate (mg/L)": 25.0,
+        "Nitrite (mg/L)": 0.001,
+        "Ammonia (mg/L)": 0.061,
+        "Phosphate (mg/L)": 0.612,
+        "Fluoride (mg/L)": 0.5,
+        "Iron (mg/L)": 0.05
+    },
+    "25": {
+        "pH": 7.5,
+        "Turbidity (NTU)": 5,
+        "Hardness (mg/L)": 250,
+        "Calcium (mg/L)": 90,
+        "Magnesium (mg/L)": 6.075,
+        "Alkalinity (mg/L)": 200.0,
+        "Chloride (mg/L)": 54,
+        "Nitrate (mg/L)": 25.0,
+        "Nitrite (mg/L)": 0.001,
+        "Ammonia (mg/L)": 0.061,
+        "Phosphate (mg/L)": 3.06,
+        "Fluoride (mg/L)": 0.001,
+        "Iron (mg/L)": 0.05
+    },
+    "26": {
+        "pH": 7.5,
+        "Turbidity (NTU)": 0,
+        "Hardness (mg/L)": 325,
+        "Calcium (mg/L)": 60,
+        "Magnesium (mg/L)": 42.525,
+        "Alkalinity (mg/L)": 325.0,
+        "Chloride (mg/L)": 54,
+        "Nitrate (mg/L)": 65.0,
+        "Nitrite (mg/L)": 0.0343,
+        "Ammonia (mg/L)": 0.061,
+        "Phosphate (mg/L)": 0.612,
+        "Fluoride (mg/L)": 0.5,
+        "Iron (mg/L)": 0.05
+    },
+    "27": {
+        "pH": 7.5,
+        "Turbidity (NTU)": 0,
+        "Hardness (mg/L)": 650,
+        "Calcium (mg/L)": 90,
+        "Magnesium (mg/L)": 103.275,
+        "Alkalinity (mg/L)": 350.0,
+        "Chloride (mg/L)": 180,
+        "Nitrate (mg/L)": 65.0,
+        "Nitrite (mg/L)": 0.0343,
+        "Ammonia (mg/L)": 0.122,
+        "Phosphate (mg/L)": 0.306,
+        "Fluoride (mg/L)": 1.0,
+        "Iron (mg/L)": 0.05
+    },
+    "28": {
+        "pH": 7.5,
+        "Turbidity (NTU)": 0,
+        "Hardness (mg/L)": 500,
+        "Calcium (mg/L)": 50,
+        "Magnesium (mg/L)": 91.125,
+        "Alkalinity (mg/L)": 275.0,
+        "Chloride (mg/L)": 144,
+        "Nitrate (mg/L)": 45.0,
+        "Nitrite (mg/L)": 0.001,
+        "Ammonia (mg/L)": 0.061,
+        "Phosphate (mg/L)": 0.153,
+        "Fluoride (mg/L)": 1.0,
+        "Iron (mg/L)": 0.05
+    },
+    "29": {
+        "pH": 7.5,
+        "Turbidity (NTU)": 0,
+        "Hardness (mg/L)": 450,
+        "Calcium (mg/L)": 80,
+        "Magnesium (mg/L)": 60.75,
+        "Alkalinity (mg/L)": 225.0,
+        "Chloride (mg/L)": 126,
+        "Nitrate (mg/L)": 65.0,
+        "Nitrite (mg/L)": 0.0343,
+        "Ammonia (mg/L)": 0.061,
+        "Phosphate (mg/L)": 0.612,
+        "Fluoride (mg/L)": 0.5,
+        "Iron (mg/L)": 0.05
+    },
+    "30": {
+        "pH": 7.5,
+        "Turbidity (NTU)": 0,
+        "Hardness (mg/L)": 250,
+        "Calcium (mg/L)": 40,
+        "Magnesium (mg/L)": 36.45,
+        "Alkalinity (mg/L)": 200.0,
+        "Chloride (mg/L)": 72,
+        "Nitrate (mg/L)": 100.0,
+        "Nitrite (mg/L)": 1.715,
+        "Ammonia (mg/L)": 0.061,
+        "Phosphate (mg/L)": 0.612,
+        "Fluoride (mg/L)": 0.5,
+        "Iron (mg/L)": 0.05
+    }
+
+};
+// Function to show the modal popup
+// Function to show the modal popup
+
+// Sample type mapping
+const sampleTypeMapping = {
+    1: "Openwell",
+    2: "Borewell",
+    3: "Borewell",
+    4: "Borewell",
+    5: "Openwell",
+    6: "Borewell",
+    7: "Borewell",
+    8: "Openwell",
+    9: "Openwell",
+    10: "Openwell",
+    11: "Openwell",
+    12: "Openwell",
+    13: "Openwell",
+    14: "Openwell",
+    15: "Openwell",
+    16: "Openwell",
+    17: "Openwell",
+    18: "Borewell",
+    19: "Openwell",
+    20: "Openwell",
+    21: "Openwell",
+    22: "Openwell",
+    23: "Borewell",
+    24: "Borewell",
+    25: "Openwell",
+    26: "Openwell",
+    27: "Openwell",
+    28: "Openwell",
+    29: "Openwell",
+    30: "Openwell",
+};
+function showModal(sample) {
+    var modal = document.getElementById("myModal");
+    var modalTable = document.getElementById("modalSampleTable");
+    modalTable.innerHTML = ""; // Clear previous data
+
+    // Populate modal with sample details
+    var details = sampleDetails[sample.sample_no];
+
+    // Debugging: Check if details are retrieved correctly
+    console.log(details); // Make sure sampleDetails has data
+
+    if (!details) {
+        console.error('No details found for sample:', sample.sample_no);
+        return;
+    }
+
+    // Get the sample type from the mapping
+    var sampleType = sampleTypeMapping[sample.sample_no] || "Unknown";
+
+    // Set the sample number and location in the modal header
+    var sampleHeader = document.querySelector('.modal-header h2');
+    sampleHeader.textContent = "Sample Location (" + sampleType + "): " + sample.sample_no;
+
+    // Create an array for all parameters in the specified order
+    const waterQualityData = [
+        { name: "pH", desirable: "6.50", permissible: "8.50", standard: "IS10500" },
+        { name: "Turbidity (NTU)", desirable: "1", permissible: "5", standard: "IS10500" },
+        { name: "Hardness (mg/L)", desirable: "200.00", permissible: "600.00", standard: "IS10500" },
+        { name: "Calcium (mg/L)", desirable: "75.00", permissible: "200.00", standard: "IS10500" },
+        { name: "Magnesium (mg/L)", desirable: "30.00", permissible: "100.00", standard: "IS10500" },
+        { name: "Alkalinity (mg/L)", desirable: "200.00", permissible: "600.00", standard: "IS10500" },
+        { name: "Chloride (mg/L)", desirable: "250.00", permissible: "1000.00", standard: "IS10500" },
+        { name: "Nitrate (mg/L)", desirable: "-", permissible: "45.00", standard: "IS10500" },
+        { name: "Nitrite (mg/L)", desirable: "-", permissible: "1.00", standard: "EPA" },
+        { name: "Ammonia (mg/L)", desirable: "-", permissible: "0.50", standard: "IS10500" },
+        { name: "Phosphate (mg/L)", desirable: "-", permissible: "0.10", standard: "WHO" },
+        { name: "Fluoride (mg/L)", desirable: "1.00", permissible: "1.50", standard: "IS10500" },
+        { name: "Iron (mg/L)", desirable: "-", permissible: "0.30", standard: "IS10500" },
+    ];
+
+    // Define decimal formats for each parameter
+    const decimalFormats = {
+        "pH": 2,
+        "Turbidity (NTU)": 0,
+        "Hardness (mg/L)": 2,
+        "Calcium (mg/L)": 2,
+        "Magnesium (mg/L)": 2,
+        "Alkalinity (mg/L)": 2,
+        "Chloride (mg/L)": 2,
+        "Nitrate (mg/L)": 2,
+        "Nitrite (mg/L)": 2,
+        "Ammonia (mg/L)": 2,
+        "Phosphate (mg/L)": 2,
+        "Fluoride (mg/L)": 2,
+        "Iron (mg/L)": 2,
+    };
+
+    // Add a row for actual sample details
+    for (var i = 0; i < waterQualityData.length; i++) {
+    var parameter = waterQualityData[i];
+    var actualValue = details[parameter.name] || "0"; // Use "0" if detail is missing
+
+    // Remove units from actual value and limits for comparison
+    const actualValueNum = parseFloat(actualValue); // Convert to a number
+    const permissibleNum = parameter.permissible === "-" ? Infinity : parseFloat(parameter.permissible);
+
+    
+    // Log the values for debugging
+    console.log(`Comparing ${parameter.name}: Actual Value = ${actualValueNum}, Permissible = ${permissibleNum}`);
+
+    // Determine the appropriate class for highlighting the water quality column
+    var valueHighlightClass = '';
+
+    // Set the pin color based on actualValueNum and permissibleNum comparison
+    if (actualValueNum > permissibleNum) {
+        valueHighlightClass = 'highlight-strong'; // Apply red background to actual value
+    }
+
+    // Format the actual value based on the defined decimal format
+    let formattedActualValue = "N/A"; // Default to "N/A"
+    if (!isNaN(actualValueNum)) {
+        const decimalPlaces = decimalFormats[parameter.name] || 0; // Get decimal places for the current parameter
+        formattedActualValue = actualValueNum.toFixed(decimalPlaces); // Format to the specified number of decimals
+    }
+
+    // Append the row for actual sample data
+    modalTable.innerHTML += `<tr>
+        <td>${parameter.name}</td>
+        <td class="${valueHighlightClass}" style="text-align: center; font-weight:600;">${formattedActualValue}</td>
+        <td style="text-align: center;">${parameter.desirable}</td>
+        <td style="text-align: center;">${parameter.permissible}</td>
+        <td style="text-align: center;">${parameter.standard}</td>
+    </tr>`;
+}
+
+
+    // Display the modal
+    modal.style.display = "block";
+}
+
+// Close the modal when clicking the close icon
+document.querySelector('.close').onclick = function() {
+    document.getElementById("myModal").style.display = "none";
+};
+
+// Close the modal when clicked outside of it
+window.onclick = function(event) {
+    var modal = document.getElementById("myModal");
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+};
+
+// Add custom markers with image pins and a tooltip
+samples.forEach(function(sample) {
+    var details = sampleDetails[sample.sample_no];
+
+    // Initialize the pin color as blue (default)
+    var pinColor = 'bluepin';
+
+    // Iterate through all water quality parameters and check if any exceed permissible limits
+    const waterQualityData = [
+        { name: "pH", permissible: "8.5" },
+        { name: "Turbidity (NTU)", permissible: "5" },
+        { name: "Hardness (mg/L)", permissible: "600" },
+        { name: "Calcium (mg/L)", permissible: "200" },
+        { name: "Magnesium (mg/L)", permissible: "100" },
+        { name: "Alkalinity (mg/L)", permissible: "600" },
+        { name: "Chloride (mg/L)", permissible: "1000" },
+        { name: "Nitrate (mg/L)", permissible: "45" },
+        { name: "Nitrite (mg/L)", permissible: "1" },
+        { name: "Ammonia (mg/L)", permissible: "0.5" },
+        { name: "Phosphate (mg/L)", permissible: "0.1" },
+        { name: "Fluoride (mg/L)", permissible: "1.5" },
+        { name: "Iron (mg/L)", permissible: "0.3" },
+    ];
+
+    for (var i = 0; i < waterQualityData.length; i++) {
+        var parameter = waterQualityData[i];
+        var actualValue = details[parameter.name] || "0"; // Use "0" if data is not available
+
+        const actualValueNum = parseFloat(actualValue); // Convert to a number (will treat "0" as a valid number)
+        const permissibleNum = parameter.permissible === "-" ? Infinity : parseFloat(parameter.permissible);
+
+        // Check if the actual value exceeds the permissible limit
+        if (actualValueNum > permissibleNum) {
+            pinColor = 'redpin'; // Change to red if any parameter exceeds permissible value
+            break; // Exit loop once the pin needs to be red (since we only need one violation to turn red)
+        }
+    }
+
+    // Create the custom icon using pinColor
+    var customIcon = L.divIcon({
+        html: `<div style="text-align: center;">
+                 <img src="${pinColor}.png" style="width: 20px; height: 30px;">
+                  <div style="font-size: 8px;color:white;font-weight: bold;margin-top: -24px;margin-left: 0px;"> ${sample.sample_no}</div>
+               </div>`,
+        iconSize: [20, 35],
+        iconAnchor: [12, 35]
+    });
+
+    // Add the marker to the map
+    var marker = L.marker([sample.lat, sample.lng], { icon: customIcon }).addTo(map);
+    marker.bindTooltip("<b>Sample Location: " + sample.sample_no + "</b>", { sticky: true });
+
+    // Show modal when the marker is clicked
+    marker.on('click', function() {
+        console.log("Marker clicked for sample:", sample.sample_no); // Check if the click works
+        showModal(sample);
+    });
+});
+
+
+
+    </script>
+</body>
+</html>
