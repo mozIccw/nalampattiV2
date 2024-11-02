@@ -549,7 +549,6 @@ canvas {
     object-fit: cover; /* Ensures images fit in the box */
     margin: 0 5px; /* Optional: margin between thumbnails */
 }
-
 .modal {
     display: none; /* Hidden by default */
     position: fixed;
@@ -558,25 +557,24 @@ canvas {
     top: 0;
     width: 100%;
     height: 100%;
-    overflow: auto; /* Enable scroll if needed */
-   
-    background-color: rgba(0, 0, 0, 0.8); /* Black background with opacity */
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.8);
 }
 
 .modal-content {
-    display: block;
-    margin: auto;
-    top:13%;
-    max-width: 60%; /* Ensure it fits within the screen */
-    max-height: 60%; /* Ensure it fits within the screen */
+    margin: 9% auto;
+    width: 60%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .close {
     position: absolute;
-    top: 11%;
-    right: 17%;
+    top: 13%;
+    right: 18%;
     color: white;
-    font-size: 40px;
+    font-size: 30px;
     font-weight: bold;
     cursor: pointer;
 }
