@@ -17,12 +17,18 @@
         <div class="navbar">
             <!-- Left side: Site logo -->
             <div class="logo-container">
-                <img src="Logos\iccw-logo-white.png" alt="ICCW Logo" class="logo">
-                <span class="site-name">Nallampatti</span>
+                <a href="https://iccw.world/" target="_blank">
+                    <img src="Logos\iccw-logo-white.png" alt="ICCW-logo" class="logo">
+                </a>
             </div>
     
             <!-- Right side: Navigation menu and Partner logo -->
             <div class="nav-and-partner">
+                <div class="hamburger" onclick="toggleMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
                 <!-- Navigation links -->
                 <nav>
                     <ul class="nav-links">
@@ -36,7 +42,9 @@
     
                 <!-- Partner logo -->
                 <div class="partner-logo-container">
-                    <img src="Logos\IITM-500x500.png" alt="IITM Logo" class="partner-logo">
+                    <a href="https://www.iitm.ac.in/" target="_blank">
+                        <img src="Logos\IITM-500x500.png" alt="IITM-logo" class="logo">
+                    </a>
                 </div>
             </div>
         </div>
@@ -53,44 +61,46 @@
     </section>
 
     <!-- Contact Details Section -->
-    <section class="contact-details">
-        <div class="contact-container">
-            <!-- Google Map Embed -->
-            <div class="map-container">
-                <!-- Google Maps Embed with location marker -->
-                <iframe 
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d62203.18297492512!2d80.20853477910156!3d12.991097899999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a526787946135f3%3A0x63850237763b3ce7!2sINTERNATIONAL%20CENTRE%20FOR%20CLEAN%20WATER!5e0!3m2!1sen!2sin!4v1729424169374!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-                </iframe>
-            </div>
+<section class="contact-details">
+    <div class="contact-container">
+        <!-- Google Map Embed -->
+        <div class="map-container">
+            <!-- Google Maps Embed with location marker -->
+            <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d62203.18297492512!2d80.20853477910156!3d12.991097899999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a526787946135f3%3A0x63850237763b3ce7!2sINTERNATIONAL%20CENTRE%20FOR%20CLEAN%20WATER!5e0!3m2!1sen!2sin!4v1729424169374!5m2!1sen!2sin" 
+                width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </div>
         
-            <!-- Contact Information -->
-            <div class="contact-info">
-                <div class="contact-item">
-                    <i class="fas fa-map-marker-alt"></i> <!-- Address Icon -->
-                    <h3>Address:</h3>
-                    <p>INTERNATIONAL CENTRE FOR CLEAN WATER (ICCW)<br>2nd Floor, B-Block, IIT Madras Research Park, Kanagam Road, Taramani, Chennai, India - 600 113.</p>
-                </div>
+        <!-- Contact Information -->
+        <div class="contact-info">
+            <div class="contact-item">
+                <i class="fas fa-map-marker-alt"></i> <!-- Address Icon -->
+                <h3>Address:</h3>
+                <p>INTERNATIONAL CENTRE FOR CLEAN WATER (ICCW)<br>2nd Floor, B-Block, IIT Madras Research Park, Kanagam Road, Taramani, Chennai, India - 600 113.</p>
+            </div>
 
-                <div class="contact-item">
-                    <i class="fas fa-phone-alt"></i> <!-- Phone Icon -->
-                    <h3>Phone:</h3>
-                    <p>+91 9790787013</p>
-                </div>
+            <div class="contact-item">
+                <i class="fas fa-phone-alt"></i> <!-- Phone Icon -->
+                <h3>Phone:</h3>
+                <p>+91 9790787013</p>
+            </div>
 
-                <div class="contact-item">
-                    <i class="fas fa-envelope"></i> <!-- Email Icon -->
-                    <h3>E-mail:</h3>
-                    <p>info@iccwindia.org</p>
-                </div>
+            <div class="contact-item">
+                <i class="fas fa-envelope"></i> <!-- Email Icon -->
+                <h3>E-mail:</h3>
+                <p>info@iccwindia.org</p>
+            </div>
 
-                <div class="contact-item">
-                    <i class="fas fa-clock"></i> <!-- Working Hours Icon -->
-                    <h3>Working Hours:</h3>
-                    <p>Monday – Saturday<br>09:00 am – 05:30 pm</p>
-                </div>
+            <div class="contact-item">
+                <i class="fas fa-clock"></i> <!-- Working Hours Icon -->
+                <h3>Working Hours:</h3>
+                <p>Monday – Saturday<br>09:00 am – 05:30 pm</p>
             </div>
         </div>
-    </section>
+    </div>
+</section>
+
 
     <!-- Footer Section (reused from previous pages) -->
     <footer>
@@ -134,6 +144,14 @@
             </div>
         </div>
     </footer>
+
+    <!-- For mobile & Tab menu-->
+<script>
+    function toggleMenu() {
+        const navLinks = document.querySelector('.nav-links');
+        navLinks.classList.toggle('active');
+    }
+    </script>
 
 </body>
 </html>

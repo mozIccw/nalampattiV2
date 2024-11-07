@@ -21,12 +21,18 @@
         <div class="navbar">
             <!-- Left side: Site logo -->
             <div class="logo-container">
-                <img src="Logos\iccw-logo-white.png" alt="ICCW Logo" class="logo">
-                <span class="site-name">Nallampatti</span>
+                <a href="https://iccw.world/" target="_blank">
+                    <img src="Logos\iccw-logo-white.png" alt="ICCW-logo" class="logo">
+                </a>
             </div>
     
             <!-- Right side: Navigation menu and Partner logo -->
             <div class="nav-and-partner">
+                <div class="hamburger" onclick="toggleMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
                 <!-- Navigation links -->
                 <nav>
                     <ul class="nav-links">
@@ -40,7 +46,9 @@
     
                 <!-- Partner logo -->
                 <div class="partner-logo-container">
-                    <img src="Logos\IITM-500x500.png" alt="IITM Logo" class="partner-logo">
+                    <a href="https://www.iitm.ac.in/" target="_blank">
+                        <img src="Logos\IITM-500x500.png" alt="IITM-logo" class="logo">
+                    </a>
                 </div>
             </div>
         </div>
@@ -158,7 +166,7 @@
     
     <div class="col-md-6" style="padding: 2px;">
         <div class="chart-container">
-            <canvas id="doughnut"></canvas>
+            <canvas id="doughnut" style="aspect-ratio: 16 / 12 !important; "></canvas>
         </div>
     </div>
 </div>
@@ -787,7 +795,13 @@ document.getElementById('refresh-button').addEventListener('click', refreshData)
 
 </script>
 
-
+<!-- For mobile & Tab menu-->
+<script>
+    function toggleMenu() {
+        const navLinks = document.querySelector('.nav-links');
+        navLinks.classList.toggle('active');
+    }
+    </script>
 
 
 </body>
