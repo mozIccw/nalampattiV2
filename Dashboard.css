@@ -143,35 +143,18 @@ nav {
 /* Dashboard Content Styles */
 .dashboard-content {
     text-align: center;
-    padding: 20px; /* Reduced padding for smaller screens */
+    padding: 40px;
     margin-top: 20px;
 }
 
-/* Chart Container */
 .chart-container {
-    max-width: 100%; /* Allow full width on smaller screens */
-    width: 90%; /* Use percentage-based width for responsiveness */
+    max-width: 600px;
     margin: 0 auto; /* Center the chart */
     padding: 20px;
     background-color: #fff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
 }
-
-/* Responsive Design */
-@media screen and (max-width: 768px) {
-    .dashboard-content {
-        padding: 15px;
-    }
-
-    .chart-container {
-        padding: 15px; /* Reduced padding for tablets */
-    }
-}
-
-@media screen and (max-width: 576px) {
-    .dashboard-content
-
 
 /* Footer Styling */
 footer {
@@ -183,26 +166,26 @@ footer {
 
 .footer-content {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-between; /* Space between the 3 sections */
     align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
-    flex-wrap: wrap; /* Allows wrapping for smaller screens */
-    gap: 10px; /* Adds spacing between items when wrapped */
+    max-width: 1200px; /* Optional: Limit the width of the footer content */
+    margin: 0 auto; /* Center the footer content */
+    padding: 0 20px;
 }
 
-.left-text,
-.right-text,
-.social-icons {
-    flex: 1; /* Ensures each section takes up equal space */
-    min-width: 150px; /* Sets a minimum width for each section */
+.left-text {
+    text-align: left;
+    flex: 1; /* Ensures this section takes up space on the left */
 }
 
-/* Center align text for small screens */
-.left-text,
-.right-text,
+.right-text {
+    text-align: right;
+    flex: 1; /* Ensures this section takes up space on the right */
+}
+
 .social-icons {
     text-align: center;
+    flex: 1; /* Ensures this section stays in the center */
 }
 
 .social-icons a {
@@ -218,28 +201,4 @@ footer {
 
 footer p {
     margin: 0; /* Removes any extra margin */
-}
-
-/* Responsive Layout Adjustments */
-@media (max-width: 768px) {
-    .footer-content {
-        flex-direction: column; /* Stack items vertically on smaller screens */
-    }
-    
-    .left-text,
-    .right-text {
-        text-align: center; /* Center text for mobile */
-        margin: 5px 0; /* Adds vertical spacing between sections */
-    }
-    
-    .social-icons {
-        margin: 10px 0; /* Additional spacing for social icons */
-    }
-}
-
-@media (max-width: 576px) {
-    .social-icons a {
-        font-size: 1.3em; /* Adjust icon size for very small screens */
-        margin: 0 5px; /* Reduces spacing between icons */
-    }
 }
