@@ -353,20 +353,29 @@
                 </div>
             </div>
           
-                <div class="col-md-5 mt-2 card card1" style="min-width: 100%;">
-                    <span style="font-size: 14px;font-weight: bold;background-color: rgb(7, 23, 69);color: white;text-align: center;">Installed IoT Devices</span>
-                    <div class="image-gallery">
-                        <img src="site1.jpg" alt="Image 1" class="thumbnail" onclick="openModal(this.src)">
-                        <img src="site2.jpg" alt="Image 2" class="thumbnail" onclick="openModal(this.src)">
-                        <img src="site3.jpg" alt="Image 3" class="thumbnail" onclick="openModal(this.src)">
-                    </div>
-                
-                    <!-- Modal for displaying the larger image -->
-                    <div id="imageModal" class="modal">
-                        <span class="close" onclick="closeModal()">&times;</span>
-                        <img class="modal-content" id="modalImage">
-                    </div>
+            <div class="col-md-5 mt-2 card card1" style="min-width: 100%;">
+                <span style="font-size: 14px;font-weight: bold;background-color: rgb(7, 23, 69);color: white;text-align: center;">
+                    Installed IoT Devices
+                </span>
+                <div class="image-gallery">
+                    <img src="site1.jpg" alt="Image 1" class="thumbnail" onclick="openModal(this.src)">
+                    <img src="site2.jpg" alt="Image 2" class="thumbnail" onclick="openModal(this.src)">
+                    <video src="WaterLevelSensor.mp4" class="thumbnail" onclick="openModal(this.src)" >
+                        Your browser does not support the video tag.
+                    </video>
                 </div>
+            </div>
+            
+            <!-- Modal -->
+            <div id="imageModal" class="modal">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <div class="modal-content">
+                    <img id="modalImage" style="display: block;max-width: 768px;max-height: 421px;" alt="Modal Image">
+                    <video id="modalVideo" style="display: none;max-width: 100%;" controls>
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+            </div>
                 
        
 
