@@ -738,13 +738,18 @@ document.addEventListener('DOMContentLoaded', fetchData);
     document.getElementById('today-date').textContent = getFormattedDate();
 
 
-// Function to open the modal and display the larger image
-function openModal(src) {
-    const modal = document.getElementById('imageModal');
-    const modalImage = document.getElementById('modalImage');
-    
+    // Determine if the source is a video or image based on the file extension
+    if (src.endsWith('.mp4')) {
+        modalVideo.src = src;
+        modalVideo.style.display = 'block';
+        modalImage.style.display = 'none';
+    } else {
+        modalImage.src = src;
+        modalImage.style.display = 'block';
+        modalVideo.style.display = 'none';
+    }
+
     modal.style.display = 'block'; // Show the modal
-    modalImage.src = src; // Set the source of the modal image
 }
 
 // Function to close the modal
