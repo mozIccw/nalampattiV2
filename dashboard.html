@@ -736,8 +736,11 @@ document.addEventListener('DOMContentLoaded', fetchData);
 
     // Display today's date in the designated span
     document.getElementById('today-date').textContent = getFormattedDate();
-
-
+ function openModal(src) {
+    const modal = document.getElementById('imageModal');
+    const modalImage = document.getElementById('modalImage');
+    const modalVideo = document.getElementById('modalVideo');
+    
     // Determine if the source is a video or image based on the file extension
     if (src.endsWith('.mp4')) {
         modalVideo.src = src;
@@ -751,7 +754,6 @@ document.addEventListener('DOMContentLoaded', fetchData);
 
     modal.style.display = 'block'; // Show the modal
 }
-
 // Function to close the modal
 function closeModal() {
     const modal = document.getElementById('imageModal');
