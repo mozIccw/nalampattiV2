@@ -28,13 +28,13 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <style>
-
 /* Container for the water level */
 .water-container {
     position: relative;
     width: 100%;
     height: 100%;
-    border-radius: 10px;
+      
+    overflow: hidden; /* Ensure the waves and bubbles are contained */
 }
 
 /* The water fill */
@@ -45,18 +45,82 @@
     height: 0%; /* Initial height set to 0 */
     background: linear-gradient(to bottom, #29ABE2, #0000FF); /* Water gradient */
     transition: height 0.5s ease-in-out; /* Smooth animation for changes in water level */
+    overflow: hidden; /* Contain the waves and bubbles */
 }
 
-/* Text to display the water level */
-#water-level-text {
-    text-align: center;
-    margin-top: 10px;
-    font-size: 16px;
-    font-weight: bold;
+/* Add waves at the top of the water level */
+.water-fill::before,
+.water-fill::after {
+    content: '';
+    position: absolute;
+    top: -20px; /* Position wave above the water level */
+    width: 200%;
+    height: 30px; /* Wave height */
+    background: rgba(255, 255, 255, 0.5); /* Wave color */
+    border-radius: 50%; /* Curve the wave */
+    opacity: 0.7; /* Slight transparency */
+    animation: wave-animation 4s infinite linear; /* Wave animation */
+}
+
+.water-fill::after {
+    top: -15px; /* Slightly offset the second wave */
+    opacity: 0.5; /* Less opacity for the second wave */
+    animation-duration: 6s; /* Different speed for second wave */
+}
+
+/* Wave animation */
+@keyframes wave-animation {
+    0% {
+        transform: translateX(-50%);
+    }
+    100% {
+        transform: translateX(50%);
+    }
+}
+
+/* Bubbles */
+.bubble {
+    position: absolute;
+    bottom: 0;
+    width: 10px;
+    height: 10px;
+    background-color: rgba(255, 255, 255, 0.6);
+    border-radius: 50%;
+    animation: bubble-animation 6s infinite ease-in-out;
+    opacity: 0;
+}
+
+.bubble1 {
+    left: 20%;
+    animation-delay: 0s;
+}
+
+.bubble2 {
+    left: 50%;
+    animation-delay: 2s;
+}
+
+.bubble3 {
+    left: 70%;
+    animation-delay: 4s;
+}
+
+/* Bubble animation */
+@keyframes bubble-animation {
+    0% {
+        transform: translateY(0) scale(0.8);
+        opacity: 0;
+    }
+    30% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-100%) scale(1.2);
+        opacity: 0;
+    }
 }
 
 </style>
-
 
 <body style="display: flex; flex-direction: column; min-height: 100vh; margin: 0;">
     <header>
@@ -347,20 +411,24 @@
            <!-- Water Level Card -->
            <div class="col-md-5">
          
-            <div class="card card1" style="padding: 20px;">
+            <div class="card card1" >
 			<div class="water-percentage" style="visibility: hidden;">Loading...</div>
 			<div class="meter-card-2 charts">
 
- <div class="water-tank">
-                        <div class="liquid">
-	<div class="water-container">
-				<div class="water-fill" id="water-fill"></div>
-			</div>
-			<div id="waterLevelPercentage"></div>
-                            
-                        </div>
-                      
-                        <div class="indicator" data-value="100">&nbsp;72 ft</div>
+			<div class="water-tank">    
+
+				<div class="liquid">
+					<div class="water-container">
+						<!-- Water Fill -->
+						<div class="water-fill" id="water-fill">
+							<!-- Bubble Elements -->
+							<div class="bubble bubble1"></div>
+							<div class="bubble bubble2"></div>
+							<div class="bubble bubble3"></div>
+						</div>
+					</div>
+				</div>
+						<div class="indicator" data-value="100">&nbsp;72 ft</div>
                         <div class="indicator" data-value="85">&nbsp;60 ft</div> 
                         <div class="indicator" data-value="70">&nbsp;48 ft</div> 
                         <div class="indicator" data-value="55">&nbsp;36 ft</div> 
@@ -368,7 +436,7 @@
                         <div class="indicator" data-value="25">&nbsp;12 ft</div> 
                         <div class="indicator" data-value="0">&nbsp;0 ft</div> 
                         <div class="label" id="water-level"></div>
-                    </div>
+            </div>
 					
 					
 					
