@@ -17,15 +17,50 @@
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
     <link rel="stylesheet" href="Dashboard.css">
     <link rel="stylesheet" href="styles.css">
     
     <!-- Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+<style>
+
+/* Container for the water level */
+.water-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+}
+
+/* The water fill */
+.water-fill {
+    position: absolute;
+    bottom: 0; /* Starts from the bottom */
+    width: 100%; /* Full width of the container */
+    height: 0%; /* Initial height set to 0 */
+    background: linear-gradient(to bottom, #29ABE2, #0000FF); /* Water gradient */
+    transition: height 0.5s ease-in-out; /* Smooth animation for changes in water level */
+}
+
+/* Text to display the water level */
+#water-level-text {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+</style>
+
 
 <body style="display: flex; flex-direction: column; min-height: 100vh; margin: 0;">
     <header>
+	
         <div class="navbar">
             <!-- Left side: Site logo -->
             <div class="logo-container">
@@ -315,51 +350,29 @@
             <div class="card card1" style="padding: 20px;">
 			<div class="water-percentage" style="visibility: hidden;">Loading...</div>
 			<div class="meter-card-2 charts">
-				<div class="water-tank">
-					<div class="liquid">
-						<svg id="water-svg" class="water" viewBox="0 0 200 100" preserveAspectRatio="xMidYMid meet" width="100%" height="100%">
-    <defs>
-        <!-- Gradient for Modern Browsers -->
-        <linearGradient id="waterGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0" style="stop-color:#29ABE2;" />
-            <stop offset="0.1643" style="stop-color:#28A6E3;" />
-            <stop offset="0.3574" style="stop-color:#2496E6;" />
-            <stop offset="0.5431" style="stop-color:#1E7DEA;" />
-            <stop offset="0.7168" style="stop-color:#1559F0;" />
-            <stop offset="0.874" style="stop-color:#0B2CF7;" />
-            <stop offset="1" style="stop-color:#0000FF;" />
-        </linearGradient>
-        <!-- Gradient with WebKit-Specific Prefix for Safari -->
-        <linearGradient id="waterGradient-webkit" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0" style="stop-color:#29ABE2;" />
-            <stop offset="0.1643" style="stop-color:#28A6E3;" />
-            <stop offset="0.3574" style="stop-color:#2496E6;" />
-            <stop offset="0.5431" style="stop-color:#1E7DEA;" />
-            <stop offset="0.7168" style="stop-color:#1559F0;" />
-            <stop offset="0.874" style="stop-color:#0B2CF7;" />
-            <stop offset="1" style="stop-color:#0000FF;" />
-        </linearGradient>
-    </defs>
-    <!-- Use both gradients for compatibility -->
-    <path fill="url(#waterGradient-webkit)" d="M 0,0 v 100 h 200 v -100 
-        c -5,0 -8,2 -13,2 c -5,0 -8,-2 -13,-2
-        c -5,0 -8,2 -13,2 c -5,0 -8,-2 -13,-2
-        c -5,0 -8,2 -13,2 c -5,0 -8,-2 -13,-2
-        c -5,0 -8,2 -13,2 c -5,0 -8,-2 -13,-2
-    " />
-</svg>
 
-					</div>
-					<!-- Indicators for different levels -->
-					<div class="indicator" data-value="100">&nbsp;72 ft.</div>
-					<div class="indicator" data-value="85">&nbsp;60 ft.</div> 
-					<div class="indicator" data-value="70">&nbsp;48 ft.</div> 
-					<div class="indicator" data-value="55">&nbsp;36 ft.</div> 
-					<div class="indicator" data-value="40">&nbsp;24 ft.</div> 
-					<div class="indicator" data-value="25">&nbsp;12 ft.</div> 
-					<div class="indicator" data-value="0">&nbsp;0 ft.</div> 
-					<div class="label" id="water-level"></div>
-				</div>
+ <div class="water-tank">
+                        <div class="liquid">
+	<div class="water-container">
+				<div class="water-fill" id="water-fill"></div>
+			</div>
+			<div id="waterLevelPercentage"></div>
+                            
+                        </div>
+                      
+                        <div class="indicator" data-value="100">&nbsp;72 ft</div>
+                        <div class="indicator" data-value="85">&nbsp;60 ft</div> 
+                        <div class="indicator" data-value="70">&nbsp;48 ft</div> 
+                        <div class="indicator" data-value="55">&nbsp;36 ft</div> 
+                        <div class="indicator" data-value="40">&nbsp;24 ft</div> 
+                        <div class="indicator" data-value="25">&nbsp;12 ft</div> 
+                        <div class="indicator" data-value="0">&nbsp;0 ft</div> 
+                        <div class="label" id="water-level"></div>
+                    </div>
+					
+					
+					
+			
 			</div>
 		</div>
 
@@ -518,6 +531,9 @@
     </div>
 </footer>
    <!-- Main Script -->
+<!-- Include Chart.js, date-fns, and date adapter scripts -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
 
    <script>
   const sidebar = document.querySelector('.sidebar');
@@ -587,9 +603,6 @@ window.addEventListener('load', function () {
 </script>
 
 
-<!-- Include Chart.js, date-fns, and date adapter scripts -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
 
 
 <script>
@@ -602,27 +615,35 @@ async function fetchData() {
         // Process water level
         const latestEntry = data[data.length - 1]; // Get the last entry
         const depth = latestEntry.Depth;
-
+		// console.log(depth);
+		// console.log(latestEntry);
         // Constants based on well dimensions
         const totalHeight = 72;  // Total well height in feet
         const sensorOffset = 2;  // Additional feet from the sensor
         const effectiveWaterLevel = depth + sensorOffset; // Total water level from the base
-        const effectiveWaterLeveltop = totalHeight - effectiveWaterLevel; // Total water level from the base
-
+        //const effectiveWaterLeveltop = totalHeight - effectiveWaterLevel; // Total water level from the base
+		// console.log(effectiveWaterLeveltop);
         // Calculate water level as a percentage of the total well height
-        const waterLevelPercentage = (100 - ((effectiveWaterLevel / totalHeight) * 100));
-        console.log(waterLevelPercentage);
+        //const waterLevelPercentage = (100 - ((effectiveWaterLevel / totalHeight) * 100));
+        const waterLevelPercentage = ((effectiveWaterLevel / totalHeight )* 100);
+       console.log(waterLevelPercentage);
+
+		//waterLevelPercentage.style = .water-fill height waterLevelPercentage;
 
         // Update water level display
         const waterPercentage = document.querySelector('.water-percentage');
         const waterLevelDiv = document.getElementById('water-level');
-        const waterSvg = document.getElementById('water-svg');
+        const waterLevelFill = document.getElementById('water-fill');
+        //const waterSvg = document.getElementById('water-svg');
+		waterLevelFill.style.height = `${waterLevelPercentage.toFixed(2)}%`;
 
         waterPercentage.textContent = `Water Level: ${waterLevelPercentage.toFixed(2)}%`;
         waterLevelDiv.textContent = `Openwell Water Level at: ${effectiveWaterLevel.toFixed(0)} Feet `;
 
         // Update the SVG water level by adjusting the 'top' position
-        waterSvg.style.top = `calc(0% + ${waterLevelPercentage}%)`;
+       // waterSvg.style.top = `calc(0% + ${waterLevelPercentage}%)`;
+		
+		
 
         // Update TDS and pH values without affecting them
         const tdsValue = latestEntry.TDS;
@@ -669,9 +690,17 @@ async function fetchData() {
     }
 }
 
-// Function to create a chart
+let myChartss = null; // Declare globally
+
 function createChart(labels, dataValues, label) {
     const ctxss = document.getElementById('myChartss').getContext('2d');
+
+    // Destroy existing chart instance if it exists
+    if (myChartss) {
+        myChartss.destroy();
+    }
+
+    // Create a new chart instance
     myChartss = new Chart(ctxss, {
         type: 'line',
         data: {
@@ -724,6 +753,7 @@ function createChart(labels, dataValues, label) {
         }
     });
 }
+
 
 // Function to update the chart
 function updateChart(labels, dataValues, label) {
@@ -802,6 +832,9 @@ window.onload = async () => {
 
 // Add event listener for refresh button
 document.getElementById('refresh-button').addEventListener('click', refreshData);
+
+
+
 
 </script>
 
